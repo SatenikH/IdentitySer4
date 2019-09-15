@@ -8,19 +8,24 @@ using WebAPIUserRegistration.Models;
 
 namespace WebAPIUserRegistration.Controllers
 {
-    [Route("api[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
-    public class ApplicationUserManager
+    public class ApplicationUserController : ControllerBase
     {
         private UserManager<ApplicationUser> _userManager;
         private SignInManager<ApplicationUser> _signInManager;
 
-        public ApplicationUserManager(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public ApplicationUserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             this._userManager = userManager;
             this._signInManager = signInManager;
         }
 
+        [HttpGet]
+        public ActionResult<IEnumerable<string>> Get()
+        {
+            return new string[] { "value111", "value2" };
+        }
         [HttpPost]
         [Route("Register")]
         public async Task<Object> PostApplicationUser(ApplicationUserModel model)
@@ -34,12 +39,30 @@ namespace WebAPIUserRegistration.Controllers
             try
             {
                 var result = await _userManager.CreateAsync(applicationUser, model.Password);
-                return result;
+                return Ok(result);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw ex;
             }
         }
     }
 }
+//namespace WebAPIUserRegistration.Controllers
+//{
+//    [Route("api/[controller]")]
+//    [ApiController]
+//    public class ApplicationUserManager : ControllerBase
+//    {
+//        public ApplicationUserManager(AuthenticationContext context)
+//        {
+
+//        }
+//        // GET api/values
+//        [HttpGet]
+//        public ActionResult<IEnumerable<string>> Get()
+//        {
+//            return new string[] { "value111", "value2" };
+//        }
+//    }
+//}
